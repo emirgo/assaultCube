@@ -13,10 +13,16 @@ DWORD GetProcId(const wchar_t* procName)
 		{
 			do
 			{
-
+				if (!_wcsicmp(procEntry.szExeFile, procName))
+				{
+					procId = procEntry.th32ProcessID;
+					break;
+				}
 			} while (Process32Next(hSnap, &procEntry));
 		}
 	}
+	CloseHandle(hSnap);
+	return procId;
 }
 
 uintptr_t GetModuleBaseAddress(DWORD procId, const wchar_t* modName)
